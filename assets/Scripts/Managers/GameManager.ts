@@ -61,6 +61,9 @@ export class GameManager extends Component {
             let _scoop = this.levelCones[this.selectedIceCream-1].getTopSoop();
             if (this.levelCones[data - 1].canAdd(_scoop.ScoopType)) {
                 // add the ice scoop to respective cone 
+                let _scoop = this.levelCones[this.selectedIceCream-1].removeScoop()
+                this.levelCones[data-1].addScoop(_scoop);
+                this.selectedIceCream = -1;
             } else {
                 this.levelCones[this.selectedIceCream-1].removeSelection();
                 this.selectedIceCream = data;

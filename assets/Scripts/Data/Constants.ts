@@ -34,7 +34,7 @@ export const TWEEN = new TweenUtils();
 
 export const SCOOP_HEIGHT = 142.8;
 
-export const ICE_CREAM_LENGTH = 3;
+export const ICE_CREAM_LENGTH = 4;
 
 
 // Global instances 

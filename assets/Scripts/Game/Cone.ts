@@ -29,7 +29,7 @@ export class Cone extends Component {
         if (!this.isSelected) {
             let topScoop = this.scoopArr.length - 1;
             if (this.scoopArr[topScoop]) {
-                TWEEN.moveTo(this.scoopArr[topScoop].node, 0.1, new Vec3(0, SCOOP_HEIGHT / 2 * (ICE_CREAM_LENGTH + 1), 0))
+                TWEEN.moveTo(this.scoopArr[topScoop].node, 0.1, new Vec3(0, SCOOP_HEIGHT / 2 * ICE_CREAM_LENGTH, 0))
             }
             this.isSelected = true
         }
