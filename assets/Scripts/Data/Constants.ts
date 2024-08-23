@@ -1,3 +1,7 @@
+
+import { TweenUtils } from "../Utils/TweenUtils";
+import { EventTarget } from 'cc';
+
 export enum SCOOPS {
     RED,
     GREEN,
@@ -10,11 +14,23 @@ export enum SCOOPS {
     LIGHT_ORANGE,
 }
 
-export enum GAME_STATE{
+export enum GAME_STATE {
     INIT,
     PLAYING,
     GAME_OVER
 }
+
+export const eventTarget = new EventTarget()
+
+export const GAME_EVENTS = {
+    ON_CLICKED: "ON_CLICKED",
+    ON_SELECTED:"ON_SELECTED",
+    ON_WIN: "ON_WIN",
+    ON_LEVEL_COMPLETED: "ON_LEVEL_COMPLETED"
+}
+
+
+export const TWEEN = new TweenUtils();
 
 export const SCOOP_HEIGHT = 142.8;
 
@@ -23,4 +39,4 @@ export const ICE_CREAM_LENGTH = 3;
 
 // Global instances 
 
-export {screenManagerInstance as SCREEN} from "../Utils/ScreenManager"
+export { screenManagerInstance as SCREEN } from "../Utils/ScreenManager"
