@@ -6,7 +6,6 @@ let screenManagerInstance: ScreenManager = null;
 
 export enum SCREENS{
     MAIN_MENU,
-    LEVEL_SELECT,
     GAME_SCREEN,
     NONE
 }

@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Vec3 } from 'cc';
 import { Scoops } from './Scoops';
 import { eventTarget, GAME_EVENTS, ICE_CREAM_LENGTH, SCOOP_HEIGHT, SCOOPS, TWEEN } from '../Data/Constants';
+import { ParticleSystem2D } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cone')
@@ -8,6 +9,9 @@ export class Cone extends Component {
 
     @property({ type: Node })
     scoopParent: Node = null;
+
+    @property({ type: ParticleSystem2D })
+    finishParticle: ParticleSystem2D
 
     private scoopArr: Scoops[] = [];
 
@@ -18,6 +22,8 @@ export class Cone extends Component {
     private coneId: number = 0;
 
     private isSelected: boolean = false;
+
+    private canSelected: boolean = true;
 
     protected onEnable(): void {
         eventTarget.on(GAME_EVENTS.ON_SELECTED, this.onConeSelected, this)
@@ -60,7 +66,8 @@ export class Cone extends Component {
      * @returns 
      */
     onClick() {
-        eventTarget.emit(GAME_EVENTS.ON_CLICKED, this.coneId);
+        if (this.canSelected)
+            eventTarget.emit(GAME_EVENTS.ON_CLICKED, this.coneId);
     }
 
     /**
@@ -70,6 +77,10 @@ export class Cone extends Component {
     addScoop(_scoop: Scoops) {
         if (this.scoopLength <= ICE_CREAM_LENGTH) {
             this.addToCone(_scoop)
+            if (this.checkWin()) {
+                this.finishParticle.resetSystem();
+                this.canSelected = false;
+            }
         } else {
             console.error("Invalid node or ice cream length exceeded");
         }
@@ -80,9 +91,12 @@ export class Cone extends Component {
      * @returns boolean
      */
     checkWin(): boolean {
-        if (this.scoopArr.length === 0) return false;
-        const _scoopType = this.scoopArr[0].ScoopType;
-        return this.scoopArr.every(scoop => scoop.ScoopType === _scoopType);
+        if (this.scoopArr.length === ICE_CREAM_LENGTH){
+            const _scoopType = this.scoopArr[0].ScoopType;
+            return this.scoopArr.every(scoop => scoop.ScoopType === _scoopType);
+        }
+        return false
+       
     }
 
     /**
@@ -92,11 +106,13 @@ export class Cone extends Component {
     removeScoop(): Scoops | null {
         if (this.scoopArr.length == 0) return null
         let _scoop: Scoops = this.scoopArr.pop();
-        if (_scoop) {
-            return _scoop
-        } else {
+        this.isSelected = false;
+        if (!_scoop) {
             console.error("there is no scoop in cone")
+            return null;
         }
+        return _scoop;
+
     }
 
 
@@ -143,6 +159,8 @@ export class Cone extends Component {
     resetContainers() {
         this.node.destroyAllChildren();
         this.scoopArr = [];
+        this.isSelected = false;
+        this.canSelected = true;
     }
 
     /**

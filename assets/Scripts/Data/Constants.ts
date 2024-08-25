@@ -26,7 +26,8 @@ export const GAME_EVENTS = {
     ON_CLICKED: "ON_CLICKED",
     ON_SELECTED:"ON_SELECTED",
     ON_WIN: "ON_WIN",
-    ON_LEVEL_COMPLETED: "ON_LEVEL_COMPLETED"
+    ON_LEVEL_COMPLETED: "ON_LEVEL_COMPLETED",
+    ON_GAME_START:"ON_GAME_START",
 }
 
 
@@ -40,3 +41,4 @@ export const ICE_CREAM_LENGTH = 4;
 // Global instances 
 
 export { screenManagerInstance as SCREEN } from "../Utils/ScreenManager"
+export { popupManagerInstance as POPUP } from "../Utils/PopUpManager"
