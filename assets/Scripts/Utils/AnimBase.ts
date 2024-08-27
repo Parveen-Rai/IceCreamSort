@@ -4,15 +4,23 @@ const { ccclass, property } = _decorator;
 @ccclass('AnimBase')
 export class AnimBase extends Component {
 
-    private anim :Animation = null;
-    start(): void {
-        this.anim = this.getComponent(Animation);
+    @property({type:Animation})
+     animation :Animation = null;
+
+     private _callback:any
+
+    play(isReverse = false, callback = null){
+         this._callback = callback;
+        let clip = this.animation.defaultClip;
+        clip.wrapMode = isReverse?AnimationClip.WrapMode.Reverse:AnimationClip.WrapMode.Normal
+        console.log("ISrEVERSE ",isReverse);
+        console.log("WrapMode ", clip.wrapMode);
+        this.animation.play(clip.name);
     }
 
-    play(isReverse = false){
-        let clip = this.anim.defaultClip;
-        clip.wrapMode = isReverse?AnimationClip.WrapMode.Reverse:AnimationClip.WrapMode.Normal
-        this.anim.play();
+    onAnimEnd(){
+        if(this._callback)
+            this._callback();
     }
 }
 

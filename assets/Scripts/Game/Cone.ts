@@ -80,6 +80,7 @@ export class Cone extends Component {
             if (this.checkWin()) {
                 this.finishParticle.resetSystem();
                 this.canSelected = false;
+                eventTarget.emit(GAME_EVENTS.ON_SCOOP_COMPLETED);
             }
         } else {
             console.error("Invalid node or ice cream length exceeded");

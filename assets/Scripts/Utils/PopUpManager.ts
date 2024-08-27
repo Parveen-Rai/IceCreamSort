@@ -6,13 +6,13 @@ const { ccclass, property } = _decorator;
 let popupManagerInstance: PopUpManager = null
 
 export enum POPUPS {
+    GAME_OVER,
     LOADING,
     SETTINGS,
-    GAME_OVER,
-    YOU_LOSE,
     NO_ADS,
     ERROR,
-    INFO
+    INFO,
+    TRANSITION,
 }
 
 @ccclass('PopUpManager')
@@ -22,7 +22,7 @@ export class PopUpManager extends Component {
     popups: PopupBase[] = [];
 
 
-    private activePopupList:PopupBase[] = [];
+    private activePopupList: PopupBase[] = [];
 
     protected onLoad(): void {
         popupManagerInstance = this;
@@ -35,19 +35,19 @@ export class PopUpManager extends Component {
      * @param callback 
      */
     showPopup(popupType: POPUPS, data: any = null, callback: (() => void) | null = null) {
-        if(this.popups[popupType]){
+        if (this.popups[popupType]) {
             let currentPopup = this.popups[popupType];
             currentPopup.node.active = true;
             currentPopup.onShow(data);
             let anim = currentPopup.getComponent(AnimBase);
-            if(anim){
+            if (anim) {
                 anim.play();
             }
-            if(callback){
+            if (callback) {
                 callback();
             }
             this.activePopupList.push(currentPopup);
-        }else{
+        } else {
             console.error("Popup does not exist");
         }
     }
@@ -56,16 +56,21 @@ export class PopUpManager extends Component {
     /**
      * Hide currently active popup
      */
-    hideCurrentPopup(){
-        if(this.activePopupList.length > 0){
+    hideCurrentPopup() {
+        if (this.activePopupList.length > 0) {
             let popup = this.activePopupList.pop();
             let anim = popup.getComponent(AnimBase);
-            if(anim){
-                anim.play(true);
+            if (anim) {
+                anim.play(true, () => {
+                    popup.onHide();
+                    popup.node.active = false;
+                });
+            } else {
+                popup.onHide();
+                popup.node.active = false;
             }
-            popup.onHide();
-            popup.node.active = false;
-        }else{
+
+        } else {
             console.error("No popups to hide");
         }
     }
@@ -74,10 +79,10 @@ export class PopUpManager extends Component {
     /**
      * Hide all popups 
      */
-    hideAllPopups(){
-       while (this.activePopupList.length > 0) {
-        this.hideCurrentPopup();
-       }
+    hideAllPopups() {
+        while (this.activePopupList.length > 0) {
+            this.hideCurrentPopup();
+        }
     }
 }
 

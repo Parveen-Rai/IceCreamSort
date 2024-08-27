@@ -1,8 +1,9 @@
 import { _decorator, Component, instantiate, Prefab, Node, Layout } from 'cc';
-import { eventTarget, GAME_EVENTS, GAME_STATE } from '../Data/Constants';
+import { eventTarget, GAME_EVENTS, GAME_STATE, POPUP } from '../Data/Constants';
 import { Scoops } from '../Game/Scoops';
 import { Cone } from '../Game/Cone';
 import { levels } from '../Data/Levels';
+import { POPUPS } from '../Utils/PopUpManager';
 const { ccclass, property } = _decorator;
 
 const TOTAL_NUMBERS_OF_CONES = 14;
@@ -31,6 +32,8 @@ export class GameManager extends Component {
 
     private selectedIceCream: number = -1;
 
+    private completedConesCount:number = 0;
+
 
 
     protected onLoad(): void {
@@ -44,6 +47,15 @@ export class GameManager extends Component {
 
     private registerEvents() {
         eventTarget.on(GAME_EVENTS.ON_CLICKED, this.onClicked, this)
+        eventTarget.on(GAME_EVENTS.ON_SCOOP_COMPLETED,this.onCheckForGameOver,this);
+    }
+
+
+    onCheckForGameOver() {
+        this.completedConesCount++;
+        if(this.completedConesCount >= 3){
+            POPUP.showPopup(POPUPS.GAME_OVER);
+        }
     }
 
     onClicked(data) {
