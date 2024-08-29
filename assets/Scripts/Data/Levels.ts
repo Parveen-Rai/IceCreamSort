@@ -29,5 +29,36 @@ export const levels = [
             },
 
         ]
+    },
+    {
+        level: 1,
+        container: [
+            {
+                id: 1,
+                initialScoops: [4, 1, 2, 1],
+                parentId: 0
+            },
+            {
+                id: 2,
+                initialScoops: [4, 4, 2, 2],
+                parentId: 0
+            },
+            {
+                id: 3,
+                initialScoops: [2, 4, 1, 1],
+                parentId: 1
+            },
+            {
+                id: 4,
+                initialScoops: [],
+                parentId: 0
+            },
+            {
+                id: 5,
+                initialScoops: [],
+                parentId: 1
+            },
+
+        ]
     }
 ]

@@ -1,7 +1,6 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, Node, Vec3, ParticleSystem2D } from 'cc';
 import { Scoops } from './Scoops';
 import { eventTarget, GAME_EVENTS, ICE_CREAM_LENGTH, SCOOP_HEIGHT, SCOOPS, TWEEN } from '../Data/Constants';
-import { ParticleSystem2D } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cone')
@@ -158,7 +157,7 @@ export class Cone extends Component {
      * reset All the containers
      */
     resetContainers() {
-        this.node.destroyAllChildren();
+        this.scoopParent.destroyAllChildren();
         this.scoopArr = [];
         this.isSelected = false;
         this.canSelected = true;

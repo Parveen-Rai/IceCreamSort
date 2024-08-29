@@ -24,15 +24,13 @@ export class GameManager extends Component {
 
     private coneArray: Cone[] = [];
 
-    private currentState: GAME_STATE = GAME_STATE.INIT;
+    private currentState: GAME_STATE = GAME_STATE.NONE;
 
     private currentLevel: number = 0
 
     private levelCones: Cone[] = [];
 
     private selectedIceCream: number = -1;
-
-    private completedConesCount:number = 0;
 
 
 
@@ -42,19 +40,31 @@ export class GameManager extends Component {
 
     protected start(): void {
         this.setUpCones();
-        this.createLevel();
+       
     }
 
     private registerEvents() {
         eventTarget.on(GAME_EVENTS.ON_CLICKED, this.onClicked, this)
         eventTarget.on(GAME_EVENTS.ON_SCOOP_COMPLETED,this.onCheckForGameOver,this);
+        eventTarget.on(GAME_EVENTS.ON_GAME_START,this.startGame,this);
+    }
+
+    private startGame(level){
+        this.currentLevel = level;
+        this.changeState(GAME_STATE.INIT);
+    }
+
+    gameOver(){
+        this.scheduleOnce(()=>{
+            POPUP.showPopup(POPUPS.GAME_OVER,this.currentLevel);
+            this.resetAll();
+        },1)
     }
 
 
     onCheckForGameOver() {
-        this.completedConesCount++;
-        if(this.completedConesCount >= 3){
-            POPUP.showPopup(POPUPS.GAME_OVER);
+        if(this.checkForGameWin()){
+            this.changeState(GAME_STATE.GAME_OVER)
         }
     }
 
@@ -126,12 +136,14 @@ export class GameManager extends Component {
         if (_state === this.currentState) return
         switch (_state) {
             case GAME_STATE.INIT:
+                this.createLevel();
                 // init satate work
                 break;
             case GAME_STATE.PLAYING:
                 // playing state work
                 break
             case GAME_STATE.GAME_OVER:
+                this.gameOver();
                 // game over state work
                 break
             default:
@@ -158,14 +170,26 @@ export class GameManager extends Component {
             _cone.getComponent(Cone).initializeIceCream(intatiatedScoop, data.container[i].id);
         }
         this.setUpParent();
+        this.changeState(GAME_STATE.PLAYING)
     }
 
     resetAll() {
         this.levelCones.forEach(element => {
-            element.node.destroyAllChildren();
+            element.resetContainers()
             element.node.setParent(this.node);
         })
         this.levelCones = [];
+    }
+
+    checkForGameWin(){
+        for(const element of this.levelCones){
+            if(element.scoopLength > 0){
+                if(!element.checkWin()) return false;
+            }else{
+                continue;
+            }
+        }
+        return true;
     }
 }
 

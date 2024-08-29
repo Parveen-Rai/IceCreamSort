@@ -17,7 +17,8 @@ export enum SCOOPS {
 export enum GAME_STATE {
     INIT,
     PLAYING,
-    GAME_OVER
+    GAME_OVER,
+    NONE,
 }
 
 export const eventTarget = new EventTarget()

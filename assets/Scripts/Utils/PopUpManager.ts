@@ -21,6 +21,7 @@ export class PopUpManager extends Component {
     @property({ type: PopupBase })
     popups: PopupBase[] = [];
 
+    private currentPopup:number = 0;
 
     private activePopupList: PopupBase[] = [];
 
@@ -36,19 +37,41 @@ export class PopUpManager extends Component {
      */
     showPopup(popupType: POPUPS, data: any = null, callback: (() => void) | null = null) {
         if (this.popups[popupType]) {
-            let currentPopup = this.popups[popupType];
-            currentPopup.node.active = true;
-            currentPopup.onShow(data);
-            let anim = currentPopup.getComponent(AnimBase);
+            let _cP = this.popups[popupType];
+            _cP.node.active = true;
+            _cP.onShow(data);
+            let anim = _cP.getComponent(AnimBase);
             if (anim) {
                 anim.play();
             }
             if (callback) {
                 callback();
             }
-            this.activePopupList.push(currentPopup);
+            this.activePopupList.push(_cP);
+            this.currentPopup = this.popups.indexOf(_cP);
         } else {
             console.error("Popup does not exist");
+        }
+    }
+
+    /**
+     * Hide popup
+     * @param popupType 
+     */
+    hide(popupType:POPUPS){
+        if(this.activePopupList.length > 0){
+            let p =  this.activePopupList.splice(popupType);
+            let anim = p[0].getComponent(AnimBase);
+            if (anim) {
+                anim.play(true, () => {
+                    p[0].onHide();
+                    p[0].node.active = false;
+                });
+            } else {
+                p[0].onHide();
+                p[0].node.active = false;
+            }
+
         }
     }
 
