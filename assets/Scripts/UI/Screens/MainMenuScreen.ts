@@ -9,6 +9,19 @@ export class MainMenuScreen extends ScreenBase {
     
     onShow(data: any): void {
         
+
+      
+
+    }
+
+    start(){
+        // jsb.reflection.callStaticMethod(
+        //     "com/cocos/game/AdManager", 
+        //     "loadBannerView", 
+        //     "(Ljava/lang/String;Ljava/lang/Boolean)V", 
+        //     "ca-app-pub-8856913399600283/8416753168",
+        //     "false"
+        // );
     }
 
     onHide(): void {
