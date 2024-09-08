@@ -27,6 +27,7 @@ package com.cocos.game;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import com.cocos.service.SDKWrapper;
 import com.cocos.lib.CocosActivity;
@@ -39,7 +40,7 @@ public class AppActivity extends CocosActivity {
         super.onCreate(savedInstanceState);
         // DO OTHER INITIALIZATION BELOW
         SDKWrapper.shared().init(this);
-        AdManager adManager = new AdManager(this);
+        AdManager.initializeAdMob(this);
     }
 
     @Override
