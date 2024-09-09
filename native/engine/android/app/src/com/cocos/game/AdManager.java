@@ -9,10 +9,13 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
+import com.cocos.lib.CocosHelper;
 import com.cocos.lib.CocosJavascriptJavaBridge;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
@@ -37,6 +40,7 @@ public class AdManager {
         MobileAds.initialize(activity,initializationStatus -> {
             Log.d(LogTag,"AdMobInitialized");
         });
+
     }
 
 
@@ -145,21 +149,64 @@ public class AdManager {
 
     }
 
-    public static   void showRewardedAd(){
-        runOnGLThread(()->{
-            if(rewardedAd!=null){
+    public static  void showRewardedAd(){
+        final boolean[] rewardEarned = {false};
+        final int[] reward = {0};
+        try {
+            runOnGLThread(()->{
+                if(rewardedAd!=null){
+                    rewardedAd.show(activity, new OnUserEarnedRewardListener() {
+                        @Override
+                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            rewardEarned[0] = true;
+                            reward[0] = rewardItem.getAmount();
+                        }
+                    });
 
-                rewardedAd.show(activity, new OnUserEarnedRewardListener() {
-                    @Override
-                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        CocosJavascriptJavaBridge.evalString("window.onRewardedAdCompleted("+rewardItem.getAmount()+");");
-                    }
-                });
-            }else{
-                Log.d(LogTag,"Rewarded Ad Not Loaded");
-                CocosJavascriptJavaBridge.evalString("window.onAdNotLoaded();");
-            }
-        });
+                    rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                        @Override
+                        public void onAdShowedFullScreenContent() {
+                            super.onAdShowedFullScreenContent();
+                        }
+
+                        @Override
+                        public void onAdImpression() {
+                            super.onAdImpression();
+                        }
+
+                        @Override
+                        public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                            super.onAdFailedToShowFullScreenContent(adError);
+                        }
+
+                        @Override
+                        public void onAdDismissedFullScreenContent() {
+                            super.onAdDismissedFullScreenContent();
+                            if(rewardEarned[0]){
+                                CocosHelper.runOnGameThread(()->{
+                                    CocosJavascriptJavaBridge.evalString("window.onRewardedAdCompleted("+reward[0]+");");
+                                });
+                            }
+
+                        }
+
+                        @Override
+                        public void onAdClicked() {
+                            super.onAdClicked();
+                        }
+                    });
+                }else{
+                    Log.d(LogTag,"Rewarded Ad Not Loaded");
+                    CocosHelper.runOnGameThread(()->{
+                        CocosJavascriptJavaBridge.evalString("window.onAdNotLoaded();");
+                    });
+
+                }
+            });
+        }catch (Exception e){
+            Log.d(LogTag,"ERROR IN CALL " + e.getMessage());
+        }
+
 
     }
 

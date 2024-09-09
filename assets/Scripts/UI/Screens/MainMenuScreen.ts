@@ -5,6 +5,16 @@ import { SCREENS } from '../../Utils/ScreenManager';
 import { native } from 'cc';
 const { ccclass, property } = _decorator;
 
+declare global {
+    interface Window {
+        onRewardedAdCompleted: (params:any) => void;
+    }
+  }
+
+  window.onRewardedAdCompleted = function(val){
+    console.log("RewardCompleted" ,val);
+}
+
 @ccclass('MainMenuScreen')
 export class MainMenuScreen extends ScreenBase {
     
@@ -14,6 +24,8 @@ export class MainMenuScreen extends ScreenBase {
       
 
     }
+
+   
 
     start(){
         try {
