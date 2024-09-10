@@ -102,7 +102,6 @@ public class AdManager {
                 public void onAdLoaded(@NonNull InterstitialAd ad) {
                     super.onAdLoaded(ad);
                     interstitialAd = ad;
-                    showInterstitialAd();
                 }
 
                 @Override
@@ -142,7 +141,6 @@ public class AdManager {
                 public void onAdLoaded(@NonNull RewardedAd ad) {
                     super.onAdLoaded(ad);
                     rewardedAd = ad;
-                    showRewardedAd();
                 }
             });
         });

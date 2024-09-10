@@ -1,4 +1,5 @@
 
+import { AndroidJsBridge } from "../Utils/AndroidJsBridge";
 import { TweenUtils } from "../Utils/TweenUtils";
 import { EventTarget } from 'cc';
 
@@ -34,6 +35,8 @@ export const GAME_EVENTS = {
 
 
 export const TWEEN = new TweenUtils();
+
+export const ANDROID_JS_BRIDGE = new AndroidJsBridge();
 
 export const SCOOP_HEIGHT = 142.8;
 

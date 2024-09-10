@@ -1,6 +1,7 @@
 import { _decorator, Component } from 'cc';
 import { PopupBase } from './PopupBase';
 import { AnimBase } from './AnimBase';
+import { ANDROID_JS_BRIDGE } from '../Data/Constants';
 const { ccclass, property } = _decorator;
 
 let popupManagerInstance: PopUpManager = null
