@@ -1,6 +1,8 @@
 import { _decorator} from 'cc';
 import { ScreenBase } from '../../Utils/ScreenBase';
-import { eventTarget, GAME_EVENTS} from '../../Data/Constants';
+import { eventTarget, GAME_EVENTS, POPUP, SCREEN} from '../../Data/Constants';
+import { SCREENS } from '../../Utils/ScreenManager';
+import { POPUPS } from '../../Utils/PopUpManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameScreen')
@@ -13,6 +15,27 @@ export class GameScreen extends ScreenBase {
     onHide(): void {
         
     }
+
+    onClickHome(){
+        eventTarget.emit(GAME_EVENTS.ON_GAME_ABANDONED);
+        SCREEN.showScreen(SCREENS.MAIN_MENU);
+    }
+
+    onClickRestart(){
+        eventTarget.emit(GAME_EVENTS.ON_GAME_ABANDONED)
+        eventTarget.emit(GAME_EVENTS.ON_GAME_START);
+        //Restart Your game
+    }
+
+    onSettingsClick(){
+        POPUP.showPopup(POPUPS.SETTINGS);
+    }
+
+    onPurchaseAdRemove(){
+        // start the purchase 
+    }
+
+
 }
 
 

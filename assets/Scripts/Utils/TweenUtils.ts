@@ -10,9 +10,14 @@ export class TweenUtils {
      * @param targetPos The target position to move to.
      * @param _easingFunc easing function for animation curve
      */
-    moveTo(node: Node, duration: number, targetPos: Vec3, _easingFunc:TweenEasing = 'linear') {
+    moveTo(node: Node, duration: number, targetPos: Vec3, _easingFunc:TweenEasing = 'linear',callback: (() => void) | null = null) {
         return tween(node)
             .to(duration, { position: targetPos },{easing:_easingFunc})
+            .call(()=>{
+                if(callback!=null){
+                    callback();
+                }
+            })
             .start();
     }
 
@@ -112,5 +117,23 @@ export class TweenUtils {
         const par = tween(node).parallel(...tweenActions);
         par.start();
         return par;
+    }
+
+     /**
+     * Squash animation: The node squashes down (scales on Y axis) and stretches (scales on X axis),
+     * then returns to its original shape.
+     * @param node The node to animate.
+     * @param duration The duration of the squash and stretch.
+     * @param squashAmount How much to squash (e.g., 0.7 for a slight squash).
+     */
+     squash(node: Node, duration: number, squashAmount: number = 0.7) {
+        const originalScale = node.scale.clone();  // Store the original scale
+
+        return tween(node)
+            // Squash down and stretch horizontally
+            .to(duration * 0, { scale: new Vec3(originalScale.x * 1.2, originalScale.y * squashAmount, originalScale.z) }, { easing: 'quadOut' })
+            // Return to the original scale
+            .to(duration * 0.5, { scale: originalScale }, { easing: 'quadIn' })
+            .start();
     }
 }

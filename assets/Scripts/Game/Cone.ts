@@ -34,7 +34,7 @@ export class Cone extends Component {
         if (!this.isSelected) {
             let topScoop = this.scoopArr.length - 1;
             if (this.scoopArr[topScoop]) {
-                TWEEN.moveTo(this.scoopArr[topScoop].node, 0.1, new Vec3(0, SCOOP_HEIGHT / 2 * ICE_CREAM_LENGTH, 0))
+                TWEEN.moveTo(this.scoopArr[topScoop].node, 0.2, new Vec3(0, SCOOP_HEIGHT / 2 * ICE_CREAM_LENGTH, 0),"elasticOut")
             }
             this.isSelected = true
         }
@@ -47,16 +47,24 @@ export class Cone extends Component {
      */
     initializeIceCream(_scoop: Scoops[], _coneId: number) {
         _scoop.forEach(element => {
-            this.addScoop(element);
+            this.addScoop(element,false);
         })
         this.coneId = _coneId;
     }
 
 
-    private addToCone(_scoop: Scoops) {
+    private addToCone(_scoop: Scoops,canAnimate) {
         _scoop.node.parent = this.scoopParent;
         const HALF_SCOOP_HEIGHT = SCOOP_HEIGHT / 2;
-        _scoop.node.setPosition(0, HALF_SCOOP_HEIGHT * this.scoopArr.length);
+        if(canAnimate){
+            _scoop.node.position = new Vec3(0, SCOOP_HEIGHT / 2 * ICE_CREAM_LENGTH, 0)
+            TWEEN.moveTo(_scoop.node,0.1,new Vec3(0, HALF_SCOOP_HEIGHT * this.scoopArr.length),"quartIn",(()=>{
+                TWEEN.squash(_scoop.node,0.1);
+            }));
+        }else{
+            _scoop.node.position = new Vec3(0, HALF_SCOOP_HEIGHT * this.scoopArr.length)
+        }
+       
         this.scoopArr.push(_scoop);
     }
 
@@ -73,9 +81,9 @@ export class Cone extends Component {
      * Adding new scoop to ice cream
      * @param _scoop 
      */
-    addScoop(_scoop: Scoops) {
+    addScoop(_scoop: Scoops, canAnimate = true) {
         if (this.scoopLength <= ICE_CREAM_LENGTH) {
-            this.addToCone(_scoop)
+            this.addToCone(_scoop,canAnimate)
             if (this.checkWin()) {
                 this.finishParticle.resetSystem();
                 this.canSelected = false;
@@ -147,7 +155,9 @@ export class Cone extends Component {
     removeSelection() {
         if (this.isSelected) {
             const topMostScoop = this.scoopArr.length - 1;
-            TWEEN.moveTo(this.scoopArr[topMostScoop].node, 0.1, new Vec3(0, (SCOOP_HEIGHT / 2) * (this.scoopArr.length - 1)))
+            TWEEN.moveTo(this.scoopArr[topMostScoop].node, 0.1, new Vec3(0, (SCOOP_HEIGHT / 2) * (this.scoopArr.length - 1)),"linear",(()=>{
+                TWEEN.squash(this.scoopArr[topMostScoop].node,0.1)
+            }))
             this.isSelected = false;
         }
     }

@@ -47,11 +47,17 @@ export class GameManager extends Component {
         eventTarget.on(GAME_EVENTS.ON_CLICKED, this.onClicked, this)
         eventTarget.on(GAME_EVENTS.ON_SCOOP_COMPLETED,this.onCheckForGameOver,this);
         eventTarget.on(GAME_EVENTS.ON_GAME_START,this.startGame,this);
+        eventTarget.on(GAME_EVENTS.ON_GAME_ABANDONED,this.setGameStateToAbandon,this);
     }
 
-    private startGame(level){
+    private startGame(level = this.currentLevel){
         this.currentLevel = level;
         this.changeState(GAME_STATE.INIT);
+        
+    }
+
+    private setGameStateToAbandon(){
+        this.changeState(GAME_STATE.ABANDONED);
     }
 
     gameOver(){
@@ -146,6 +152,9 @@ export class GameManager extends Component {
                 this.gameOver();
                 // game over state work
                 break
+            case GAME_STATE.ABANDONED:
+                this.resetAll();
+                break;    
             default:
                 console.error("State not found")
                 return

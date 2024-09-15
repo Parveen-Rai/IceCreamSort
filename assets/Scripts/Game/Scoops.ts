@@ -10,6 +10,9 @@ export class Scoops extends Component {
 
     @property({type:Sprite})
     scoopSprite :Sprite = null
+
+    // @property({type:Animation})
+    // scoopAnimation:Animation = null
     
    
     private _scoopType:SCOOPS = SCOOPS.RED;
@@ -29,6 +32,10 @@ export class Scoops extends Component {
             console.error("Invalid scoop type or sprite frame not set.")
         }
        
+    }
+
+    playImpactAnimation(){
+        // this.scoopAnimation.play();
     }
 }
 
