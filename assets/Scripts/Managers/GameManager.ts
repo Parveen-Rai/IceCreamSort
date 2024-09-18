@@ -48,6 +48,16 @@ export class GameManager extends Component {
         eventTarget.on(GAME_EVENTS.ON_SCOOP_COMPLETED,this.onCheckForGameOver,this);
         eventTarget.on(GAME_EVENTS.ON_GAME_START,this.startGame,this);
         eventTarget.on(GAME_EVENTS.ON_GAME_ABANDONED,this.setGameStateToAbandon,this);
+        eventTarget.on(GAME_EVENTS.ON_ADD_NEW_CONE,this.onConeAdded,this);
+    }
+
+    private onConeAdded(){
+        const _cone = instantiate(this.conePrefab);
+        _cone.setParent(this.coneParents[1])
+        _cone.active = true;
+        this.levelCones.push(_cone.getComponent(Cone));
+        _cone.getComponent(Cone).initializeIceCream([],this.levelCones.length);
+        this.setUpParent();
     }
 
     private startGame(level = this.currentLevel){

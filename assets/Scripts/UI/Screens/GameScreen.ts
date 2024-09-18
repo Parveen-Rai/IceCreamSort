@@ -35,6 +35,11 @@ export class GameScreen extends ScreenBase {
         // start the purchase 
     }
 
+    onClickRewardedAd(){
+        // start the rewarded ad
+        eventTarget.emit(GAME_EVENTS.ON_ADD_NEW_CONE);
+    }
+
 
 }
 
