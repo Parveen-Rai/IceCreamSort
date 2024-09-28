@@ -14,6 +14,7 @@ export enum POPUPS {
     ERROR,
     INFO,
     TRANSITION,
+    AD_WATCHED_CONFIRM,
 }
 
 @ccclass('PopUpManager')
@@ -61,7 +62,7 @@ export class PopUpManager extends Component {
      */
     hide(popupType:POPUPS){
         if(this.activePopupList.length > 0){
-            let p =  this.activePopupList.splice(popupType);
+            const p =  this.activePopupList.splice(this.activePopupList.indexOf(this.popups[popupType]),1);
             let anim = p[0].getComponent(AnimBase);
             if (anim) {
                 anim.play(true, () => {
@@ -72,7 +73,7 @@ export class PopUpManager extends Component {
                 p[0].onHide();
                 p[0].node.active = false;
             }
-
+            this.currentPopup = this.activePopupList.length-1;
         }
     }
 

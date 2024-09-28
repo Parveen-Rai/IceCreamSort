@@ -41,6 +41,8 @@ public class AppActivity extends CocosActivity {
         // DO OTHER INITIALIZATION BELOW
         SDKWrapper.shared().init(this);
         AdManager.initializeAdMob(this);
+        PlayGameUtils.initializePlayGame(this);
+
     }
 
     @Override

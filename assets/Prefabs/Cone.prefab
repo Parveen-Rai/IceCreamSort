@@ -405,11 +405,11 @@
     "startSize": 0,
     "startSizeVar": 61.8,
     "endSize": 0,
-    "endSizeVar": 10,
+    "endSizeVar": 20,
     "startSpin": 50,
     "startSpinVar": 800,
-    "endSpin": 0,
-    "endSpinVar": 0,
+    "endSpin": 15.4,
+    "endSpinVar": 14.6,
     "sourcePos": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -418,18 +418,18 @@
     "posVar": {
       "__type__": "cc.Vec2",
       "x": 74.6,
-      "y": 0
+      "y": 17.2
     },
     "emitterMode": 0,
     "gravity": {
       "__type__": "cc.Vec2",
-      "x": 0.25,
+      "x": 0,
       "y": 2000
     },
-    "speed": 0,
-    "speedVar": 0,
+    "speed": 14.9,
+    "speedVar": 15.3,
     "tangentialAccel": 100,
-    "tangentialAccelVar": 800,
+    "tangentialAccelVar": 833.4,
     "radialAccel": 0,
     "radialAccelVar": 0,
     "rotationIsDir": false,

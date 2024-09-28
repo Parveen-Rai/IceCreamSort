@@ -2,6 +2,8 @@
 import { AndroidJsBridge } from "../Utils/AndroidJsBridge";
 import { TweenUtils } from "../Utils/TweenUtils";
 import { EventTarget } from 'cc';
+import { User } from "./User";
+import { LocalStorageManager } from "./LocalStorageManager"
 
 export enum SCOOPS {
     RED,
@@ -33,7 +35,8 @@ export const GAME_EVENTS = {
     ON_GAME_START:"ON_GAME_START",
     ON_SCOOP_COMPLETED:"ON_SCOOP_COMPLETED",
     ON_GAME_ABANDONED:"ON_GAME_ABANDONED",
-    ON_ADD_NEW_CONE:"ON_ADD_NEW_CONE"
+    ON_ADD_NEW_CONE:"ON_ADD_NEW_CONE",
+    ON_USER_UPDATED:"ON_USER_UPDATED"
 }
 
 
@@ -44,6 +47,10 @@ export const ANDROID_JS_BRIDGE = new AndroidJsBridge();
 export const SCOOP_HEIGHT = 142.8;
 
 export const ICE_CREAM_LENGTH = 4;
+
+export const USER = new User();
+
+export const LOCAL_STORAGE = new LocalStorageManager();
 
 
 // Global instances 
